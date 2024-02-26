@@ -1,5 +1,7 @@
 const defaultList = require('../utils/constants');
 const Book = require('../models/book');
+const Message = require('../models/message');
+const User = require('../models/user');
 
 const PORT = process.env.CNT_PORT || 3002;
 const BASE_URL = process.env.BASE_URL || 'http://counterapp';
@@ -63,9 +65,21 @@ module.exports.renderView = async (req, res) => {
     } catch (error) {
       console.log(error);
     }
+    user = req.isAuthenticated() ? req.user : null;
+ 
+    const messages = await Message.find( {bookid: id} ).sort({ createdAt: -1 })
+    for (const message of messages) {
+      const user = await User.findOne({ username: message.username });
+      if (user) {
+          message.username = user.displayName;
+      }
+  }
+  
     res.render('books/view', {
       title: `Книга | ${book.title}`,
       book,
+      user,
+      messages,
       count: cnt,
     });
   } catch (error) {
