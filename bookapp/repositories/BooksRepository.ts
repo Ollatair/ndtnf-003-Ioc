@@ -7,5 +7,3 @@ export abstract class BooksRepository {
     abstract updateBook(id: string, book: typeof Book): Promise<any>;
     abstract deleteBook(id: string): Promise<any>;
   }
-  
-  export default BooksRepository;

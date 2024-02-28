@@ -1,10 +1,10 @@
 import "reflect-metadata";
 import { injectable } from "inversify";
 import Book from "../models/Book";
-import BooksRepository from "../repositories/BooksRepository";
+import { BooksRepository } from "../repositories/BooksRepository";
 
 @injectable()
-class BookService implements BooksRepository {
+export class BookService extends BooksRepository {
 	async createBook(book: typeof Book): Promise<any> {
 		const newBook = new Book(book);
 		await newBook.save();
@@ -29,5 +29,3 @@ class BookService implements BooksRepository {
 		await Book.findByIdAndUpdate(bookId, book);
 	}
 }
-
-export { BookService };
