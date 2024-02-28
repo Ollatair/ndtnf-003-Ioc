@@ -1,6 +1,6 @@
-const { Schema, model } = require('mongoose');
+const { mongoose } = require('mongoose');
 
-const bookSchema = new Schema(
+const bookSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -33,5 +33,8 @@ const bookSchema = new Schema(
   },
   { versionKey: false },
 );
+if (mongoose.models.Book) {
+  delete mongoose.models.Book;
+}
 
-module.exports = model('Book', bookSchema);
+module.exports = mongoose.model('Book', bookSchema);

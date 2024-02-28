@@ -66,15 +66,15 @@ module.exports.renderView = async (req, res) => {
       console.log(error);
     }
     user = req.isAuthenticated() ? req.user : null;
- 
-    const messages = await Message.find( {bookid: id} ).sort({ createdAt: -1 })
+
+    const messages = await Message.find({ bookid: id }).sort({ createdAt: -1 });
     for (const message of messages) {
       const user = await User.findOne({ username: message.username });
       if (user) {
-          message.username = user.displayName;
+        message.username = user.displayName;
       }
-  }
-  
+    }
+
     res.render('books/view', {
       title: `Книга | ${book.title}`,
       book,

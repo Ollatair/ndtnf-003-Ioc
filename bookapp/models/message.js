@@ -13,12 +13,12 @@ const messageSchema = new Schema(
     message: {
       type: String,
       default: null,
-    }
+    },
   },
-  { 
+  {
     versionKey: false,
-    timestamps: true 
-},
+    timestamps: true,
+  },
 );
 
 module.exports = model('message', messageSchema);

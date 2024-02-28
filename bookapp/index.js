@@ -32,7 +32,6 @@ passport.use('local', new LocalStrategy(options, userController.verifyUser));
 passport.serializeUser(userController.serializeUser);
 passport.deserializeUser(userController.serializeUser);
 
-
 const app = express();
 const server = http.Server(app);
 const io = socketIo(server);
@@ -41,12 +40,11 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(session({ 
+app.use(session({
   secret: 'SECRET',
   resave: false,
   saveUninitialized: false,
 }));
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -60,7 +58,6 @@ app.use('/api/books', book);
 app.use('/api/message', message);
 
 app.use(error404);
- 
 
 async function start() {
   try {
@@ -79,20 +76,19 @@ async function start() {
 
 start();
 
-io.on('connection', (socket) => { 
-  const {id} = socket;
+io.on('connection', (socket) => {
+  const { id } = socket;
   console.log(`Socket connected: ${id}`);
-  
-  const {bookId} = socket.handshake.query;
-    console.log(`Socket roomName: ${bookId}`);
-    socket.join(bookId);
-    socket.on('message-to-book', (msg) => { 
-        socket.to(bookId).emit('message-to-book', msg);
-        socket.emit('message-to-book', msg);
-    });
+
+  const { bookId } = socket.handshake.query;
+  console.log(`Socket roomName: ${bookId}`);
+  socket.join(bookId);
+  socket.on('message-to-book', (msg) => {
+    socket.to(bookId).emit('message-to-book', msg);
+    socket.emit('message-to-book', msg);
+  });
 
   socket.on('disconnect', () => {
     console.log(`Socket disconnected: ${id}`);
+  });
 });
-});
-
